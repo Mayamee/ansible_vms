@@ -12,6 +12,13 @@ Vagrant.configure("2") do |config|
 		vm_01.vm.network "private_network", ip: "192.168.1.2"
 		vm_01.disksize.size = "20GB"
 		vm_01.vm.hostname = "vm01"
+		vm_01.vm.provision "shell" do |s|
+			ssh_pub_key = File.readlines("/home/#{ENV['USER']}/.ssh/id_rsa.pub").first.strip
+			s.inline = <<-SHELL
+			echo "Append SSH Public Key to authorized_keys"
+			echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+			SHELL
+			end
 	end
 	config.vm.define "vm_02" do |vm_02|
 		vm_02.vm.box = "generic/ubuntu2004"
@@ -23,5 +30,12 @@ Vagrant.configure("2") do |config|
 		vm_02.vm.network "private_network", ip: "192.168.1.3"
 		vm_02.disksize.size = "20GB"
 		vm_02.vm.hostname = "vm02"
+		vm_02.vm.provision "shell" do |s|
+			ssh_pub_key = File.readlines("/home/#{ENV['USER']}/.ssh/id_rsa.pub").first.strip
+			s.inline = <<-SHELL
+			echo "Append SSH Public Key to authorized_keys"
+			echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+			SHELL
+			end
 	end
 end
