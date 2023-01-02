@@ -1,0 +1,8 @@
+- hosts: group1
+  become: true
+  user: vagrant
+  tasks:
+    - name: Remove nmap
+      ansible.builtin.apt:
+        name: nmap
+        state: absent
