@@ -1,9 +1,0 @@
-- hosts: group0
-  become: true
-  user: vagrant
-  tasks:
-    - name: Install nmap
-      ansible.builtin.apt:
-        name: nmap
-        state: present
-        update_cache: yes
