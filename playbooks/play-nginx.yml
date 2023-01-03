@@ -1,6 +1,9 @@
 - hosts: vms
   become: true
   user: vagrant
+  vars:
+    nginx_root_dir: /var/static/sites
+    nginx_port: 80
   tasks:
     - name: install nginx
       apt:
@@ -11,18 +14,31 @@
         - nginx
         - install
     - name: copy nginx config
-      copy:
-        src: ../files/nginx.conf
+      template:
+        src: files/nginx.conf
         dest: /etc/nginx/nginx.conf
       notify: reload nginx
       tags:
         - nginx
         - config
         - install
-    - name: add html file
-      copy:
-        src: ../files/index.html
-        dest: /var/www/html/index.html
+    - name: create nginx root dir
+      file:
+        path: "{{nginx_root_dir}}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: 0755
+      tags:
+        - nginx
+        - config
+        - install
+    - name: add html files to {{nginx_root_dir}}
+      template:
+        src: files/index.html
+        dest: "{{nginx_root_dir}}/index.html"
+        group: www-data
+        owner: www-data
       tags:
         - nginx
         - html
@@ -35,7 +51,7 @@
         - nginx
         - remove
     - name: remove html files
-      shell: rm -rf /var/www/html/*
+      shell: "rm -rf {{nginx_root_dir}}/*"
       tags:
         - nginx
         - html
