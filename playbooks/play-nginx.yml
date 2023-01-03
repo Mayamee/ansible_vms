@@ -50,6 +50,12 @@
       tags:
         - nginx
         - remove
+    - name: remove default html files
+      shell: "rm -rf /var/www/html/*"
+      tags:
+        - nginx
+        - html
+        - remove
     - name: remove html files
       shell: "rm -rf {{nginx_root_dir}}/*"
       tags:
