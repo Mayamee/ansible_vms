@@ -1,0 +1,58 @@
+# [create/remove] users
+---
+- hosts: vms
+  gather_facts: false
+  user: vagrant
+  become: true
+  vars:
+    users: [jaime, sansa, robert]
+  tasks:
+    - name: install git if not provided
+      apt:
+        name: git
+        state: present
+      tags:
+        - git
+        - install
+    - name: create users
+      user:
+        name: "{{ item }}"
+        create_home: yes
+        shell: /bin/bash
+        comment: "User {{ item }} created by Ansible"
+        password: "{{ item | password_hash('sha512') }}"
+        state: present
+      loop: "{{ users }}"
+      tags:
+        - users
+        - create
+    - name: add gitconfig
+      template:
+        src: ../files/git/gitconfig.j2
+        dest: /home/{{ item }}/.gitconfig
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: 0744
+      loop: "{{ users }}"
+      tags:
+        - git
+        - config
+        - create
+    - name: add ssh key
+      ansible.posix.authorized_key:
+        user: "{{ item }}"
+        key: "{{ lookup('file', '../files/ssh/id_rsa.pub') }}"
+      loop: "{{ users }}"
+      tags:
+        - ssh
+        - key
+        - create
+    - name: remove users
+      user:
+        name: "{{item}}"
+        state: absent
+        remove: true
+      loop: "{{ users }}"
+      tags:
+        - users
+        - remove

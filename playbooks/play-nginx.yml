@@ -15,7 +15,7 @@
         - install
     - name: copy nginx config
       template:
-        src: files/nginx.conf
+        src: ../files/nginx/nginx.conf
         dest: /etc/nginx/nginx.conf
       notify: reload nginx
       tags:
@@ -35,7 +35,7 @@
         - install
     - name: add html files to {{nginx_root_dir}}
       template:
-        src: files/index.html
+        src: ../files/nginx/index.html
         dest: "{{nginx_root_dir}}/index.html"
         group: www-data
         owner: www-data
