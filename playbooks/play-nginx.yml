@@ -1,0 +1,61 @@
+- hosts: vms
+  become: true
+  user: vagrant
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      tags:
+        - nginx
+        - install
+    - name: copy nginx config
+      copy:
+        src: ../files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+      notify: reload nginx
+      tags:
+        - nginx
+        - config
+        - install
+    - name: add html file
+      copy:
+        src: ../files/index.html
+        dest: /var/www/html/index.html
+      tags:
+        - nginx
+        - html
+        - install
+    - name: remove nginx
+      apt:
+        name: nginx
+        state: absent
+      tags:
+        - nginx
+        - remove
+    - name: remove html files
+      shell: rm -rf /var/www/html/*
+      tags:
+        - nginx
+        - html
+        - remove
+    - name: purge all nginx packets
+      command: apt-get -y purge nginx*
+      tags:
+        - nginx
+        - remove
+    - name: autoremove unused packets
+      apt:
+        autoremove: yes
+      tags:
+        - nginx
+        - remove
+  handlers:
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded
+      tags:
+        - nginx
+        - config
