@@ -1,9 +1,9 @@
 - hosts: vms
   become: true
   user: vagrant
-  vars:
-    nginx_root_dir: /var/static/sites
-    nginx_port: 80
+  # vars:
+  #   nginx_root_dir: /var/static/sites
+  #   nginx_port: 80
   tasks:
     - name: install nginx
       apt:
