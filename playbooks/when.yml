@@ -1,0 +1,22 @@
+- hosts: group1
+  gather_facts: false
+  user: vagrant
+  become: true
+  become_method: sudo
+  tasks:
+    - command: "ls /home"
+      register: result
+    - name: create folder
+      file: 
+        path: /home/some
+        state: directory
+        mode: 0777
+    - name: create file
+      file:
+        path: /home/some/{{ item }}
+        state: touch
+        mode: 0644
+        owner: "{{ item }}"
+        group: "{{ item }}"
+      loop: "{{ result.stdout_lines }}"
+      when: item != "some"
