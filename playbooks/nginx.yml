@@ -1,0 +1,63 @@
+- hosts: group1
+  user: vagrant
+  become: true
+  vars:
+    message: "Hello ansible from {{ ansible_nodename | upper }}!"
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      tags:
+        - nginx
+        - install
+    - name: load config file
+      template:
+        src: ../templates/example01/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+      notify:
+        - reload nginx
+      tags:
+        - nginx
+        - config
+        - install
+    - name: load static file
+      template:
+        src: ../templates/example01/index.html
+        dest: /var/www/html/index.html
+      tags:
+        - nginx
+        - config
+        - install
+    - name: remove nginx
+      apt:
+        name: nginx
+        state: absent
+      tags:
+        - nginx
+        - remove
+    - name: delete site files
+      file:
+        path: /var/www/html
+        state: absent
+      tags:
+        - nginx
+        - remove
+    - name: purge nginx packages
+      shell: apt -y purge nginx*
+      tags:
+        - nginx
+        - remove
+    - name: clear unnessesary packages
+      apt:
+        autoremove: yes
+      tags:
+        - nginx
+        - remove
+        - cleanup
+  handlers:
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded
