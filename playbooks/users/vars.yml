@@ -1,7 +1,0 @@
----
-users:
-  [
-    { name: "user1", shell: "/bin/bash", password: "user1" },
-    { name: "user2", shell: "/bin/bash", password: "user2" },
-    { name: "user3", shell: "/bin/bash", password: "user3" },
-  ]
