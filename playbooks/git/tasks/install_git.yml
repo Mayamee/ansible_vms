@@ -1,0 +1,19 @@
+---
+  - name: install git
+    become: true
+    apt:
+      name: git
+      state: present
+      update_cache: yes
+    tags:
+      - git
+      - install
+  - name: remove git
+    become: true
+    apt:
+      name: git
+      state: absent
+    tags:
+      - git
+      - remove
+...

@@ -1,0 +1,13 @@
+---
+  - name: load nginx config
+    become: true
+    template:
+      src: templates/nginx.conf
+      dest: /etc/nginx/nginx.conf
+    notify:
+      - reload nginx
+    tags:
+      - nginx
+      - config
+      - load
+...

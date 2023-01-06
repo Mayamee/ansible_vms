@@ -1,0 +1,11 @@
+---
+- hosts: vms
+  user: vagrant
+  vars_files:
+    - vars.yml
+  tasks:
+    - import_tasks: 
+        file: "tasks/create.yml"
+    - import_tasks: 
+        file: "tasks/remove.yml"
+...

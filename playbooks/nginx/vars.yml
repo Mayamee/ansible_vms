@@ -1,0 +1,4 @@
+---
+nginx_static_root_dir: /var/www/html
+nginx_listen_port: 8080
+...

@@ -1,0 +1,8 @@
+---
+- hosts: vms
+  user: vagrant
+  tasks:
+    - import_tasks:
+        file: "playbooks/git/tasks/install_git.yml"
+- import_playbook: "playbooks/nginx/main.yml"
+- import_playbook: "playbooks/users/main.yml"

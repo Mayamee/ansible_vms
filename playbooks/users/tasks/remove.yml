@@ -1,0 +1,12 @@
+---
+  - name: remove users
+    become: true
+    user:
+      name: "{{ item.name }}"
+      state: absent
+      remove: yes
+    loop: "{{ users }}"
+    tags:
+      - users
+      - remove
+...

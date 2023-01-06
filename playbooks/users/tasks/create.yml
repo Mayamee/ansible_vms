@@ -1,0 +1,37 @@
+---
+- name: create users
+  become: true
+  user:
+    name: "{{ item.name }}"
+    shell: "{{ item.shell }}"
+    password: "{{ item.password | password_hash('sha512') }}"
+    comment: "User {{ item.name }} created by Ansible"
+    create_home: yes
+    state: present
+  loop: "{{ users }}"
+  tags:
+    - users
+    - create
+- name: add gitconfig
+  become: true
+  template:
+    src: ../templates/gitconfig.j2
+    dest: /home/{{ item.name }}/.gitconfig
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: 0644
+  loop: "{{ users }}"
+  tags:
+    - users
+    - create
+    - gitconfig
+- name: add ssh key
+  become: true
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ lookup('file', '../files/ssh/id_rsa.pub') }}"
+  loop: "{{ users }}"
+  tags:
+    - ssh
+    - key
+    - create
