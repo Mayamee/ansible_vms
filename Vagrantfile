@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
 			echo "Append SSH Public Key to authorized_keys"
 			echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
 			SHELL
-			end
+		end
 	end
 	config.vm.define "vm_02" do |vm_02|
 		vm_02.vm.box = "generic/ubuntu2004"
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
 			echo "Append SSH Public Key to authorized_keys"
 			echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
 			SHELL
-			end
+		end
 	end
 	config.vm.define "vm_03" do |vm_03|
 		vm_03.vm.box = "generic/ubuntu2004"
@@ -57,6 +57,6 @@ Vagrant.configure("2") do |config|
 			echo "Append SSH Public Key to authorized_keys"
 			echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
 			SHELL
-			end
+		end
 	end
 end
