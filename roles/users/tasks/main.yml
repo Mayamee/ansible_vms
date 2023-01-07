@@ -1,0 +1,53 @@
+---
+# tasks file for users
+- name: Debug users variable
+  ansible.builtin.debug:
+    var: users
+  tags:
+    - users
+    - debug
+- name: Check users variable
+  ansible.builtin.fail:
+    msg: "users variable is not defined"
+  when: users is not defined
+  tags:
+    - users
+    - create
+- name: Create users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    password: "{{ item.password | password_hash('sha512') }}"
+    groups: "{{ item.groups | default(omit) }}"
+    state: present
+    create_home: true
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    comment: "{{ item.comment | default(omit) }}"
+  loop: "{{ users }}"
+  tags:
+    - users
+    - create
+- name: Delete users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    state: absent
+    remove: true
+  loop: "{{ users }}"
+  when: item.state is defined and item.state == 'absent'
+  tags:
+    - delete_users
+- name: Append SSH key
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ lookup('file', 'files/ssh/id_rsa.pub') }}"
+  loop: "{{ users }}"
+  tags:
+    - ssh_key
+    - create
+- name: Append gitconfig
+  ansible.builtin.template:
+    src: git/gitconfig.j2
+    dest: "/home/{{ item.name }}/.gitconfig"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: 0644
+  loop: "{{ users }}"

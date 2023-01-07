@@ -1,0 +1,29 @@
+users:
+  - name: backender
+    state: present
+    password: backender
+    shell: /bin/bash
+    comment: This is comment for backender
+    git_email: lala_backend@mail.com
+    git_name: lala_backend
+  - name: frontender
+    state: present
+    password: frontender
+    shell: /bin/zsh
+    comment: This is comment for frontender
+    git_email: lolo_frontend@mail.com
+    git_name: lolo_frontend
+  - name: designer
+    state: present
+    password: designer
+    shell: /bin/sh
+    comment: This is comment for designer
+  - name: db_admin
+    state: present
+    password: db_admin
+    shell: /bin/bash
+    comment: This is comment for db_admin
+packages: 
+  - nano
+  - git
+  - zsh

@@ -1,0 +1,19 @@
+[alias]
+  co = checkout
+  ci = commit
+  st = status
+  br = branch
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  type = cat-file -t
+  dump = cat-file -p
+  commend = commit --amend
+[core]
+  excludesFile = ~/.gitignore_global
+  editor = {{ item.editor | default('vim') }}
+{% if item.git_email is defined %}
+[user]
+  email = {{ item.git_email }}
+  name = {{ item.git_name | default(item.name) }}
+{% endif %}
+[credential]
+  helper = store

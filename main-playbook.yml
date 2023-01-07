@@ -1,0 +1,26 @@
+- name: Root_playbook
+  hosts: vms
+  user: vagrant
+  vars_files:
+    - vars.yml
+  pre_tasks:
+    - name: Update apt cache
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+      tags: pre
+    - name: Install packages
+      become: true
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages }}"
+      when: packages is defined
+      tags: pre
+  roles:
+    - role: users
+      become: true
+  tasks:
+    - name: Done
+      ansible.builtin.debug:
+        msg: "Done"
