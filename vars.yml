@@ -6,27 +6,27 @@ users:
     comment: This is comment for backender
     git_email: backender@mail.com
     git_name: lala_backend
-    ssh_access: present
+    ssh_access: absent
   - name: frontender
     state: present
     password: frontender
     shell: /bin/zsh
     comment: This is comment for frontender
-    git_email: lolo_frontend@mail.com
-    git_name: lolo_frontend
-    ssh_access: absent
+    git_email: frontender@mail.com
+    git_name: frontender
+    ssh_access: present
   - name: designer
     state: present
     password: designer
     shell: /bin/sh
     comment: This is comment for designer
-    ssh_access: absent
+    ssh_access: present
   - name: db_admin
     state: present
     password: db_admin
     shell: /bin/bash
     comment: This is comment for db_admin
-    ssh_access: present
+    ssh_access: absent
 packages: 
   - nano
   - git
