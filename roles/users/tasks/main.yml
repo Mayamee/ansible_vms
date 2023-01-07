@@ -35,10 +35,12 @@
   when: item.state is defined and item.state == 'absent'
   tags:
     - delete_users
-- name: Append SSH key
-  ansible.posix.authorized_key:
+- name: Append/Remove SSH key
+  ansible.builtin.include_tasks:
+    file: ssh/import_key.yml
+  vars:
     user: "{{ item.name }}"
-    key: "{{ lookup('file', 'files/ssh/id_rsa.pub') }}"
+    ssh_access: "{{ item.ssh_access | default('absent') }}"
   loop: "{{ users }}"
   tags:
     - ssh_key
