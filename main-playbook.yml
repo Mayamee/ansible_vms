@@ -1,8 +1,6 @@
 - name: Root_playbook
   hosts: vms
   user: vagrant
-  vars_files:
-    - vars.yml
   pre_tasks:
     - name: Update apt cache
       become: true
