@@ -1,11 +1,5 @@
 ---
 # tasks file for users
-- name: Debug users variable
-  ansible.builtin.debug:
-    var: users
-  tags:
-    - users
-    - debug
 - name: Check users variable
   ansible.builtin.fail:
     msg: "users variable is not defined"

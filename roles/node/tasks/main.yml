@@ -1,0 +1,14 @@
+---
+# tasks file for node
+- name: Check if facts are gathered
+  ansible.builtin.fail:
+    msg: "ansible_distribution_release is not defined"
+  when: ansible_distribution_release is not defined
+- name: Install Node.js
+  ansible.builtin.include_tasks:
+    file: install_node.yml
+  when: node is defined and node == "present"
+- name: Remove Node.js
+  ansible.builtin.include_tasks:
+    file: remove_node.yml
+  when: node is defined and node == "absent"

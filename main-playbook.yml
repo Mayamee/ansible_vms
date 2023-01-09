@@ -18,9 +18,51 @@
       when: packages is defined
       tags: pre
   roles:
+    - role: node
+      become: true
+      vars:
+        node_version: 18
+        node: present
     - role: users
       become: true
+    - role: community.zabbix.zabbix_agent
+      zabbix_agent_server: 10.100.1.1
+      zabbix_agent_serveractive: 10.100.1.1
+      zabbix_agent_package_state: present
+      zabbix_agent_version: 6.0
+      zabbix_agent_tags:
+        - tag: environment
+          value: production
+    - role: cloudalchemy.node_exporter
+      become: true
+    - role: nginxinc.nginx
+      become: true
   tasks:
-    - name: Done
-      ansible.builtin.debug:
-        msg: "Done"
+    - name: Append html nginx file
+      become: true
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: /usr/share/nginx/html/index.html
+        owner: root
+        group: root
+        mode: 0644
+      tags: static_files
+    - name: Append css nginx file
+      become: true
+      ansible.builtin.copy:
+        src: files/style.css
+        dest: /usr/share/nginx/html/style.css
+        owner: root
+        group: root
+        mode: 0644
+      tags: static_files
+- name: Check zabbix agents from local machine
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Check agents
+      ansible.builtin.command:
+        cmd: zabbix_get -s {{ item }} -k agent.ping
+      with_items: "{{ groups['vms'] | map('extract', hostvars, 'ansible_host') }}"
+      tags: debug

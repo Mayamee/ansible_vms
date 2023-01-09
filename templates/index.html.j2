@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Ansible automation</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="built-at" style="text-align: center; margin-bottom: 20px">
+        Built via Ansible at: {{ ansible_date_time.date }}
+        {{ ansible_date_time.time }}
+      </div>
+      <div id="os">
+        OS: {{ ansible_distribution }} {{ ansible_distribution_version }}
+      </div>
+      <div id="kernel">Kernel: {{ ansible_kernel }}</div>
+      <div id="uptime">Uptime: {{ ansible_uptime_seconds }}</div>
+      <div id="cpu">CPU: {{ ansible_processor }}</div>
+      <div id="memory">Memory: {{ ansible_memtotal_mb }} MB</div>
+      <div id="disk">Disk: {{ ansible_devices.sda.size }} GB</div>
+      <div id="ip">IP: {{ ansible_default_ipv4.address }}</div>
+      <div id="hostname">Hostname: {{ ansible_hostname }}</div>
+      <div id="fqdn">FQDN: {{ ansible_fqdn }}</div>
+      <div id="domain">Domain: {{ ansible_domain }}</div>
+      <div id="dns">DNS: {{ ansible_dns.nameservers }}</div>
+      <div id="gateway">Gateway: {{ ansible_default_ipv4.gateway }}</div>
+      <div id="mac">MAC: {{ ansible_default_ipv4.macaddress }}</div>
+      <div id="ansible">Ansible: {{ ansible_version.full }}</div>
+      <div id="thank-you" style="text-align: center; margin-top: 20px">
+        Thank you Ansible!
+      </div>
+    </div>
+  </body>
+</html>

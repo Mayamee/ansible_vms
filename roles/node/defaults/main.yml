@@ -1,0 +1,4 @@
+---
+# defaults file for node
+node_version: 18
+node: present
